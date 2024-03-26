@@ -21,6 +21,11 @@ namespace ATMTest
     {
         internal string Message { get; }
 
+        public override string ToString()
+        {
+            return "MSG: " + Message;
+        }
+
         internal MessageItem(string message)
         {
             Message = message;
@@ -30,6 +35,11 @@ namespace ATMTest
     internal class InputItem : SequenceItem
     {
         internal string Input { get; }
+
+        public override string ToString()
+        {
+            return "IN: " + Input;
+        }
 
         internal InputItem(string input)
         {

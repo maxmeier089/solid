@@ -23,8 +23,7 @@ namespace ATMTest
             Assert.That(Account.Balance, Is.EqualTo(0.0m));
 
             InitialLogin();
-            UserInput("1");
-            ExpectDisplayBalance(0.0m);
+            ProcessShowBalance(0.0m);
             NothingElseRequired();
 
             ATM.InsertCard(Card);
@@ -38,17 +37,13 @@ namespace ATMTest
             Assert.That(Account.Balance, Is.EqualTo(0.0m));
 
             InitialLogin();
-            UserInput("2");
-            ExpectMessage("How much money do you want do withdraw?");
-            UserInput("55");
-            ExpectMessage("Please take your money.");
-            ExpectDisplayBalance(-55.0m);
+            ProcessWithdraw("55", -55);
             NothingElseRequired();
 
             ATM.InsertCard(Card);
 
             Assert.That(Account.Balance, Is.EqualTo(-55.0m));
-        }
+        }  
 
         [Test]
         public void Deposit()
@@ -56,16 +51,13 @@ namespace ATMTest
             Assert.That(Account.Balance, Is.EqualTo(0.0m));
 
             InitialLogin();
-            UserInput("3");
-            ExpectMessage("How much money do you want do deposit?");
-            UserInput("55");
-            ExpectDisplayBalance(55.0m);
+            ProcessDeposit("55", 55);
             NothingElseRequired();
 
             ATM.InsertCard(Card);
 
             Assert.That(Account.Balance, Is.EqualTo(55.0m));
         }
-
+    
     }
 }

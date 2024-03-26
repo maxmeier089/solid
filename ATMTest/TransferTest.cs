@@ -38,6 +38,7 @@ namespace ATMTest
             UserInput("55");
             ExpectMessage("Transfer complete.");
             ExpectDisplayBalance(-55.0m);
+            AskForSomethingElse();
             NothingElseRequired();
 
             ATM.InsertCard(Card);

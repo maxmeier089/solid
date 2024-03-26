@@ -1,4 +1,5 @@
 ﻿using ATM;
+using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -64,14 +65,40 @@ namespace ATMTest
             ExpectMessage("0: Exit\n1: Show Balance\n2: Withdraw\n3: Deposit\n4: Transfer");
         }
 
-        protected void NothingElseRequired()
+        protected void ProcessShowBalance(decimal expectedBalance)
+        {
+            UserInput("1");
+            ExpectDisplayBalance(expectedBalance);
+            AskForSomethingElse();
+        }
+
+
+        protected void ProcessWithdraw(string input, decimal expectedBalance)
+        {
+            UserInput("2");
+            ExpectMessage("How much money do you want do withdraw?");
+            UserInput(input);
+            ExpectMessage("Please take your money.");
+            ExpectDisplayBalance(expectedBalance);
+            AskForSomethingElse();
+        }
+
+        protected void ProcessDeposit(string input, decimal expectedBalance)
+        {
+            UserInput("3");
+            ExpectMessage("How much money do you want do deposit?");
+            UserInput(input);
+            ExpectDisplayBalance(expectedBalance);
+            AskForSomethingElse();
+        }
+
+        protected void AskForSomethingElse()
         {
             ExpectMessage("\nDo you want to do something else?");
             ExpectMessage("0: Exit\n1: Show Balance\n2: Withdraw\n3: Deposit\n4: Transfer");
-            DoNothing();
         }
 
-        protected void DoNothing()
+        protected void NothingElseRequired()
         {
             UserInput("0");
             ExpectMessage("Bye!");
@@ -90,7 +117,7 @@ namespace ATMTest
             SequenceItem expectedItem = expectedSequence.First();
             expectedSequence.RemoveAt(0);
 
-            Assert.That(expectedItem, Is.InstanceOf<MessageItem>());
+            Assert.That(expectedItem, Is.InstanceOf<MessageItem>(), "Expected: " + expectedItem + " Actual: OUT " + message);
 
             MessageItem outputItem = expectedItem as MessageItem;
 
@@ -106,7 +133,7 @@ namespace ATMTest
             SequenceItem expectedItem = expectedSequence.First();
             expectedSequence.RemoveAt(0);
 
-            Assert.That(expectedItem, Is.InstanceOf<InputItem>());
+            Assert.That(expectedItem, Is.InstanceOf<InputItem>(), "Expected: " + expectedItem + " Actual: IN ");
 
             InputItem inputItem = expectedItem as InputItem;
 
