@@ -12,9 +12,12 @@ namespace ATMTest
         [Test]
         public void CreateAccount()
         {
-            Assert.That(Account.IBAN, Is.EqualTo("DE12345"));
-            Assert.That(Account.Name, Is.EqualTo("Franz Müller"));
-            Assert.That(Account.Balance, Is.EqualTo(0.0m));
+            Assert.Multiple(() =>
+            {
+                Assert.That(Account.IBAN, Is.EqualTo("DE12345"));
+                Assert.That(Account.Name, Is.EqualTo("Franz Müller"));
+                Assert.That(Account.Balance, Is.EqualTo(0.0m));
+            });
         }
 
         [Test]

@@ -12,23 +12,22 @@ namespace ATMTest
 
         Account OtherAccount { get; set; }
 
-        Card OtherCard { get; set; }
-
-
         [SetUp]
         public override void Setup()
         {
             base.Setup();
 
             OtherAccount = ATM.CreateAccount("DE54321", "Lisa Huber", "3125");
-            OtherCard = OtherAccount.CreateCard();
         }
 
         [Test]
         public void Transfer()
         {
-            Assert.That(Account.Balance, Is.EqualTo(0.0m));
-            Assert.That(OtherAccount.Balance, Is.EqualTo(0.0m));
+            Assert.Multiple(() =>
+            {
+                Assert.That(Account.Balance, Is.EqualTo(0.0m));
+                Assert.That(OtherAccount.Balance, Is.EqualTo(0.0m));
+            });
 
             InitialLogin();
             UserInput("4");
@@ -42,10 +41,11 @@ namespace ATMTest
             NothingElseRequired();
 
             ATM.InsertCard(Card);
-
-            Assert.That(Account.Balance, Is.EqualTo(-55.0m));
-            Assert.That(OtherAccount.Balance, Is.EqualTo(55.0m));
+            Assert.Multiple(() =>
+            {
+                Assert.That(Account.Balance, Is.EqualTo(-55.0m));
+                Assert.That(OtherAccount.Balance, Is.EqualTo(55.0m));
+            });
         }
-
     }
 }

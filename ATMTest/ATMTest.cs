@@ -30,8 +30,39 @@ namespace ATMTest
             Card = Account.CreateCard();
         }
 
+        public void DisplayMessage(string message)
+        {
+            Assert.That(expectedSequence, Is.Not.Empty);
 
-        private List<SequenceItem> expectedSequence = new List<SequenceItem>();
+            SequenceItem expectedItem = expectedSequence.First();
+            expectedSequence.RemoveAt(0);
+
+            Assert.That(expectedItem, Is.InstanceOf<MessageItem>(), "Expected: " + expectedItem + " Actual: OUT " + message);
+
+            MessageItem outputItem = expectedItem as MessageItem;
+
+            Assert.That(message, Is.Not.Null);
+
+            Assert.That(message, Is.EqualTo(outputItem.Message));
+        }
+
+
+        public string ReadUserInput()
+        {
+            Assert.That(expectedSequence, Is.Not.Empty);
+
+            SequenceItem expectedItem = expectedSequence.First();
+            expectedSequence.RemoveAt(0);
+
+            Assert.That(expectedItem, Is.InstanceOf<InputItem>(), "Expected: " + expectedItem + " Actual: IN ");
+
+            InputItem inputItem = expectedItem as InputItem;
+
+            return inputItem.Input;
+        }
+
+
+        private readonly List<SequenceItem> expectedSequence = new();
 
 
         protected void ExpectMessage(string message)
@@ -107,37 +138,6 @@ namespace ATMTest
         protected void ExpectDisplayBalance(decimal balance)
         {
             ExpectMessage("Your balance is: " + String.Format(CultureInfo.CurrentCulture, "{0:c}", balance));
-        }
-
-
-        public void DisplayMessage(string message)
-        {
-            Assert.That(expectedSequence.Count, Is.GreaterThan(0));
-
-            SequenceItem expectedItem = expectedSequence.First();
-            expectedSequence.RemoveAt(0);
-
-            Assert.That(expectedItem, Is.InstanceOf<MessageItem>(), "Expected: " + expectedItem + " Actual: OUT " + message);
-
-            MessageItem outputItem = expectedItem as MessageItem;
-
-            Assert.That(message, Is.Not.Null);
-
-            Assert.That(message, Is.EqualTo(outputItem.Message));
-        }
-
-        public string ReadUserInput()
-        {
-            Assert.That(expectedSequence.Count, Is.GreaterThan(0));
-
-            SequenceItem expectedItem = expectedSequence.First();
-            expectedSequence.RemoveAt(0);
-
-            Assert.That(expectedItem, Is.InstanceOf<InputItem>(), "Expected: " + expectedItem + " Actual: IN ");
-
-            InputItem inputItem = expectedItem as InputItem;
-
-            return inputItem.Input;
         }
 
     }

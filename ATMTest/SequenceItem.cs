@@ -10,9 +10,9 @@ namespace ATMTest
     {
         internal Action? Action { get; set; }
 
-        internal void CheckAction()
+        internal void InvokeAction()
         {
-            if (Action != null) Action();
+            Action?.Invoke();
         }
 
     }
