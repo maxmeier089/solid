@@ -4,8 +4,11 @@ using System.Text;
 
 namespace ATM
 {
-    public class AutomaticTellerMachine
+    public class ATM
     {
+
+        public static IUserInterface UI { get; set; } = new ConsoleUserInterface();
+
 
         private readonly Dictionary<string, Account> accounts;
 
@@ -15,7 +18,7 @@ namespace ATM
             // get account
             if (card.IBAN == null)
             {
-                Console.WriteLine("Unknown account.");
+                ATM.UI.DisplayMessage("Unknown account.");
                 return;
             }
 
@@ -23,19 +26,19 @@ namespace ATM
 
             if (account == null)
             {
-                Console.WriteLine("Unknown account.");
+                ATM.UI.DisplayMessage("Unknown account.");
                 return;
             }
 
 
             // check pin
-            Console.WriteLine("Please enter your PIN!");
+            ATM.UI.DisplayMessage("Please enter your PIN!");
 
             int pinTries = 3; // max 3 tries
 
             while (true)
             {
-                string? pinInput = Console.ReadLine();
+                string? pinInput = ATM.UI.ReadUserInput();
 
                 if (pinInput != null)
                 {
@@ -48,26 +51,26 @@ namespace ATM
 
                     if (pinInputHash == account.PinHash)
                     {
-                        Console.WriteLine("PIN verified.");
+                        ATM.UI.DisplayMessage("PIN verified.");
                         break;
                     }
                 }
 
                 pinTries--;
 
-                Console.WriteLine("Wrong PIN! " + pinTries + " tries left.");
+                ATM.UI.DisplayMessage("Wrong PIN! " + pinTries + " tries left.");
 
                 if (pinTries == 0)
                 {
-                    Console.WriteLine("3 wrong PINs entered.");
-                    Console.WriteLine("Bye.");
+                    ATM.UI.DisplayMessage("3 wrong PINs entered.");
+                    ATM.UI.DisplayMessage("Bye.");
                     return;
                 }
             }
 
 
             // PIN ok!
-            Console.WriteLine("Welcome " + account.Name + "!");
+            ATM.UI.DisplayMessage("Welcome " + account.Name + "!");
 
             // Perform tasks
             CheckWhatUserWantsToDo(account);
@@ -75,16 +78,16 @@ namespace ATM
 
         void CheckWhatUserWantsToDo(Account account)
         {
-            Console.WriteLine("\nWhat do you want to do?");
+            ATM.UI.DisplayMessage("\nWhat do you want to do?");
 
             static void askIfUserWantsSomethingElse()
             {
-                Console.WriteLine("\nDo you want to do something else? (y/n)");
+                ATM.UI.DisplayMessage("\nDo you want to do something else?");
             }
 
             while (true)
             {
-                Console.WriteLine(
+                ATM.UI.DisplayMessage(
                     "0: Exit\n" +
                     "1: Show Balance\n" +
                     "2: Withdraw\n" +
@@ -92,7 +95,7 @@ namespace ATM
                     "4: Transfer"
                     );
 
-                string? input = Console.ReadLine();
+                string? input = ATM.UI.ReadUserInput();
 
                 if (input == "0") break;
                 else if (input == "1")
@@ -102,13 +105,13 @@ namespace ATM
                 }
                 else if (input == "2")
                 {
-                    Console.WriteLine("How much money do you want do withdraw?");
+                    ATM.UI.DisplayMessage("How much money do you want do withdraw?");
 
                     decimal amount = ReadAmount();
 
                     account.Balance -= amount;
 
-                    Console.WriteLine("Please take your money.");
+                    ATM.UI.DisplayMessage("Please take your money.");
 
                     ShowBalance(account);
 
@@ -116,7 +119,7 @@ namespace ATM
                 }
                 else if (input == "3")
                 {
-                    Console.WriteLine("How much money do you want do deposit?");
+                    ATM.UI.DisplayMessage("How much money do you want do deposit?");
 
                     decimal amount = ReadAmount();
 
@@ -130,28 +133,28 @@ namespace ATM
                 {
                     Account? targetAccount = null;
 
-                    Console.WriteLine("Please enter the target account IBAN:");
+                    ATM.UI.DisplayMessage("Please enter the target account IBAN:");
 
                     while (targetAccount == null)
                     {
-                        string? ibanInput = Console.ReadLine();
+                        string? ibanInput = ATM.UI.ReadUserInput();
 
                         if (ibanInput != null)
                         {
                             targetAccount = accounts.GetValueOrDefault(ibanInput);
                         }
 
-                        if (targetAccount == null) Console.WriteLine("Unknown IBAN!");
+                        if (targetAccount == null) ATM.UI.DisplayMessage("Unknown IBAN!");
                     }
 
-                    Console.WriteLine("How much money do you want to transfer?");
+                    ATM.UI.DisplayMessage("How much money do you want to transfer?");
 
                     decimal amount = ReadAmount();
 
                     account.Balance -= amount;
                     targetAccount.Balance += amount;
 
-                    Console.WriteLine("Transfer complete.");
+                    ATM.UI.DisplayMessage("Transfer complete.");
 
                     ShowBalance(account);
 
@@ -159,11 +162,11 @@ namespace ATM
                 }
                 else
                 {
-                    Console.WriteLine("Unknown input! (enter 0, 1, 2, 3)");
+                    ATM.UI.DisplayMessage("Unknown input! (enter 0, 1, 2, 3)");
                 }
             }
 
-            Console.WriteLine("Bye!");
+            ATM.UI.DisplayMessage("Bye!");
         }
 
         public Account CreateAccount(string iban, string name, string pin)
@@ -177,14 +180,14 @@ namespace ATM
 
         public static void ShowBalance(Account account)
         {
-            Console.WriteLine("Your balance is: " + String.Format(CultureInfo.CurrentCulture, "{0:c}", account.Balance));
+            ATM.UI.DisplayMessage("Your balance is: " + String.Format(CultureInfo.CurrentCulture, "{0:c}", account.Balance));
         }
 
         static decimal ReadAmount()
         {
             while (true)
             {
-                string? input = Console.ReadLine();
+                string? input = ATM.UI.ReadUserInput();
 
                 if (decimal.TryParse(input, out decimal amount))
                 {
@@ -192,12 +195,12 @@ namespace ATM
                 }
                 else
                 {
-                    Console.WriteLine("Please enter a number!");
+                    ATM.UI.DisplayMessage("Please enter a number!");
                 }
             }
         }
 
-        public AutomaticTellerMachine()
+        public ATM()
         {
             accounts = new Dictionary<string, Account>();
         }

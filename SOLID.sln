@@ -65,6 +65,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OwnBrandSoundSensor", "OwnB
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LightControllerStarter", "LightControllerStarter\LightControllerStarter.csproj", "{2C14DD6D-5080-4A97-8A9E-8A38FB8C8EE3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ATMTest", "ATMTest\ATMTest.csproj", "{248BB04B-9E2A-4AD0-BE35-1680CBC01031}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -167,6 +169,10 @@ Global
 		{2C14DD6D-5080-4A97-8A9E-8A38FB8C8EE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C14DD6D-5080-4A97-8A9E-8A38FB8C8EE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C14DD6D-5080-4A97-8A9E-8A38FB8C8EE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{248BB04B-9E2A-4AD0-BE35-1680CBC01031}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{248BB04B-9E2A-4AD0-BE35-1680CBC01031}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{248BB04B-9E2A-4AD0-BE35-1680CBC01031}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{248BB04B-9E2A-4AD0-BE35-1680CBC01031}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

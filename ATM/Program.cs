@@ -1,6 +1,6 @@
 ﻿using ATM;
 
-AutomaticTellerMachine atm = new();
+ATM.ATM atm = new();
 
 Account account1 = atm.CreateAccount("DE12345", "Franz Müller", "4278");
 Card card1 = account1.CreateCard();
