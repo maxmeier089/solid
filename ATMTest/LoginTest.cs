@@ -8,7 +8,21 @@ using System.Security.Principal;
 namespace ATMTest
 {
     public class LoginTest : ATMTest
-    {     
+    {
+
+        [Test]
+        public void LoginSuccess()
+        {
+            Assert.That(Account.Balance, Is.EqualTo(0.0m));
+
+            InitialLogin();
+            UserInput("0");
+            ExpectMessage("Bye!");
+
+            ATM.InsertCard(Card);
+
+            Assert.That(Account.Balance, Is.EqualTo(0.0m));
+        }
 
         [Test]
         public void LoginFail()
@@ -23,18 +37,33 @@ namespace ATMTest
             ExpectMessage("Wrong PIN! 0 tries left.");
             ExpectMessage("3 wrong PINs entered.");
             ExpectMessage("Bye.");
+
+            ATM.InsertCard(Card);
         }
 
         [Test]
-        public void LoginSuccess()
+        public void LoginAlmostFail()
         {
-            CreateLoginSequence();
+            NewSequence();
+            ExpectMessage("Please enter your PIN!");
+            UserInput("4275");
+            ExpectMessage("Wrong PIN! 2 tries left.");
+            UserInput("4272");
+            ExpectMessage("Wrong PIN! 1 tries left.");
+            EnterCorrectPIN();
             UserInput("0");
             ExpectMessage("Bye!");
 
             ATM.InsertCard(Card);
+        }
 
-            Assert.That(Account.Balance, Is.EqualTo(0.0m));
+        [Test]
+        public void UnknownAccount()
+        {
+            NewSequence();
+            ExpectMessage("Unknown account.");
+
+            ATM.InsertCard(new Card("5401"));
         }
 
     }

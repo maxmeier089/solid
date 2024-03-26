@@ -8,6 +8,7 @@ namespace ATM
 {
     public class ConsoleUserInterface : IUserInterface
     {
+
         public void DisplayMessage(string text)
         {
             Console.WriteLine(text);

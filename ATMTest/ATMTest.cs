@@ -1,7 +1,9 @@
 ﻿using ATM;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,7 +20,7 @@ namespace ATMTest
 
 
         [SetUp]
-        public void Setup()
+        public virtual void Setup()
         {
             ATM = new ATM.ATM();
             global::ATM.ATM.UI = this;
@@ -46,10 +48,15 @@ namespace ATMTest
             expectedSequence.Clear();
         }
 
-        protected void CreateLoginSequence()
+        protected void InitialLogin()
         {
             NewSequence();
             ExpectMessage("Please enter your PIN!");
+            EnterCorrectPIN();
+        }
+
+        protected void EnterCorrectPIN()
+        {
             UserInput("4278");
             ExpectMessage("PIN verified.");
             ExpectMessage("Welcome Franz Müller!");
@@ -57,12 +64,22 @@ namespace ATMTest
             ExpectMessage("0: Exit\n1: Show Balance\n2: Withdraw\n3: Deposit\n4: Transfer");
         }
 
-        protected void CeateNothingElseSequence()
+        protected void NothingElseRequired()
         {
             ExpectMessage("\nDo you want to do something else?");
             ExpectMessage("0: Exit\n1: Show Balance\n2: Withdraw\n3: Deposit\n4: Transfer");
+            DoNothing();
+        }
+
+        protected void DoNothing()
+        {
             UserInput("0");
             ExpectMessage("Bye!");
+        }
+
+        protected void ExpectDisplayBalance(decimal balance)
+        {
+            ExpectMessage("Your balance is: " + String.Format(CultureInfo.CurrentCulture, "{0:c}", balance));
         }
 
 
